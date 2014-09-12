@@ -1,0 +1,116 @@
+function red = entrenamiento(red, trainInputs, trainTargets, parametros)
+
+%Entrenamiento de la red.
+%Devuelve los centros encontrados.
+
+%Creación de la matriz de grupos.
+% En esta matriz se van a ir guardando los ejemplos junto con el grupo que
+% les va asignando la red.
+matriz_grupos = zeros(size(trainInputs, 1), (size(trainInputs, 2) + 1));
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%Selección de centros: se seleccionan como centros iniciales algunos de los
+%ejemplos, de forma aleatoria.
+
+red.centros = zeros(parametros.numCentros, size(trainInputs, 2));
+
+randomIndex = randi([1, size(trainInputs, 1)]);
+randomRowInput = trainInputs(randomIndex, :);
+red.centros(1, :) =  randomRowInput;
+% 
+% for i=2:parametros.numCentros
+% randomIndex2 = randi([1, size(trainInputs, 1)]);
+%     while randomIndex2 == randomIndex,
+%         randomIndex2 = randi([1, size(trainInputs, 1)]);
+%     end
+% 
+%     red.centros(i, :) = trainInputs(randomIndex2, :);
+% end
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%% K-MEDIAS++ %%%%%%%%%%%%%%%%
+% el primer centro aleatorio ya está elegido
+cont_centros = 1;
+distribution = zeros(size(trainInputs, 1), 1);
+%recorremos los datos
+
+for cent=2:parametros.numCentros
+    for t=1:size(trainInputs,1)
+
+        %determinar el centro más cercano de los que ya hay
+        distancia = norm(trainInputs(t, :) - red.centros(1, :));
+        for z=2:cont_centros
+           d = norm(trainInputs(t, :) - red.centros(z, :));
+           if d < distancia
+               distancia = d;
+           end
+        end
+
+        distribution(t) = distancia^2;
+    end
+    
+    %índice aleatorio
+    y = randsample(size(trainInputs,1),1,true,distribution);
+    red.centros(cent, :) = trainInputs(y, :);
+    
+end
+
+disp('iniciales')
+red.centros
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+for i=1:parametros.maxIter,
+    
+    for k=1:size(trainInputs, 1),
+        %calcular cuál es el centro más cercano al ejemplo que se está
+        %considerando
+        distancia = norm(trainInputs(k, :) - red.centros(1, :));
+        j = 1;
+        centroMasCercano = j;        
+        for j=2:parametros.numCentros
+            newDistancia = norm(trainInputs(k, :) - red.centros(j, :));
+            if newDistancia < distancia
+                distancia = newDistancia;
+                centroMasCercano = j;
+            end
+        end
+        matriz_grupos(k, :) = [trainInputs(k, :) centroMasCercano];        
+    end
+    
+    centrosAnt = red.centros;
+    
+    for k=1:parametros.numCentros
+       %sacamos todos los ejemplos de cada grupo
+       cont = 1;
+       suma = 0;
+       grupo = zeros(size(trainInputs,1), size(trainInputs, 2));
+       for z=1:size(trainInputs,1)
+           fila = matriz_grupos(z, :);
+           if fila(size(fila,2)) == k
+               fila(size(fila,2)) = []; %eliminamos la columna del grupo
+               grupo(cont, :) = fila;
+               cont = cont + 1;
+           end
+       end
+%        disp('grupo')
+%        grupo
+       %calculamos el sumatorio de todos los ejemplos del grupo
+       suma = sum(grupo);
+%        disp('media de grupo')
+%        suma
+        
+       %nuevo centro
+       red.centros(k, :) = suma/cont;
+%        disp('nuevo centro')
+%        red.centros(k, :)
+
+    end
+    disp('hola')
+    
+    %si los centros no han cambiado, salimos
+    if centrosAnt == red.centros
+        return
+    end
+    
+end

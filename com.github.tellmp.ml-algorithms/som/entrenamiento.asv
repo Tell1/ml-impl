@@ -1,0 +1,46 @@
+function red = entrenamiento(red, trainInputs, trainTargets, parametros)
+
+%Entrenamiento de la red.
+%Devuelve la matriz de pesos adaptada.
+
+% Inicialización
+red.W = rand(size(red.W));
+sigma_cero = size(red.W, 2); % Al principio, el radio se inicia al tamaño 
+fAprendizajeInicial = red.fAprendizaje;
+
+for i=1:parametros.maxIter,
+    
+    % selección de una fila
+    randomIndex = randi([1, size(trainInputs, 1)]);
+    randomRowInput = trainInputs(randomIndex, :);
+    
+    distancia = 1000000;
+    indexBMU = 0;
+    
+    % obtención de la BMU
+    for j=1:size(trainInputs, 2),
+        if j ~= randomIndex
+           d = norm(trainInputs(j, :) - randomRowInput);
+           if d < distancia
+               distancia = d;
+               indexBMU = j;
+           end
+        end
+    end
+    
+    % cálculo de la anchura del vecindario
+    anchuraVencidario = sigma_cero * (exp(-i/(m_iNumIterations/log(sigma_cero))));
+    
+    % adaptación de los pesos
+    e = randomRowInput - red.W(randomRowIndex, :);
+    for k=1:size(red.W, 2)
+        d = norm(red.W(k, :) - trainInputs(indexBMU, :));
+        v = funcionVecindario(d, anchuraVecindario);
+        red.W(k, :) = reglaAprendizaje(x, e, red.fAprendizaje, v, red.W(k, :));
+    end
+    
+    % adaptación del factor de aprendizaje
+    red.fAprendizaje = fAprendizajeInicial * exp(-i/parametros.maxIter);
+    
+    
+end

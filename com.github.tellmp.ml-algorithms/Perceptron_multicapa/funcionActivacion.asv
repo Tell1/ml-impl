@@ -1,0 +1,25 @@
+function y = funcionActivacion(x, W, b, tipo)
+
+%Función que calcula la función de activación de un perceptrón multicapa.
+% Adrián González Duarte - CNE 2012-2013
+
+%cálculo de la suma ponderada
+a = x * W + b;
+
+%cálculo de la función de activación
+sigm = 1.0 / (1.0 + exp(-a));
+
+switch tipo,
+    case 0:
+        y = sigm;
+    case 1:        
+        numClases = 3; %ejemplo
+        div = 1/numClases;
+
+        for i=1:numClases
+            part = i*div;
+            if sigm <= part
+                y = i;
+            end
+        end
+end

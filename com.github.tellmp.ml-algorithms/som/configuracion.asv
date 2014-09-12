@@ -1,0 +1,8 @@
+function [red] = configuracion(entradas, objetivos, parametros)
+
+% Función que inicializa la estructura de la red
+
+red = struct('W', 0, 'parametros', parametros);
+
+end
+

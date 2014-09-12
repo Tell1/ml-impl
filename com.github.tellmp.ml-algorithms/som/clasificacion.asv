@@ -1,0 +1,35 @@
+function clases = clasificacion (red, entradas, parametros)
+
+%Función que clasifica unos datos de entrada según unos pesos ya
+%entrenados
+
+%T = clusterdata(red.W,'maxclust', 3)
+[IDX,C] = kmeans(red.W,3);
+
+for i=1:size(entradas, 1),
+    %buscar la BMU
+    distancia = norm(red.W(1, :) - entradas(i, :));
+    indexBMU = 1;
+    
+    for j=2:size(red.W, 1),
+        if j ~= i
+           d = norm(red.W(j, :) - entradas(i, :));
+           if d < distancia
+               distancia = d;
+               indexBMU = j;
+           end
+        end
+    end
+
+    distancia = norm(red.W(indexBMU, :) - C(1, :));
+    ind = 1;
+    for z=2:size(C,1)
+        d = norm(red.W(indexBMU, :) - C(z, :));
+        if d < distancia
+            distancia = d;
+            ind = z;
+        end
+    end
+    clases(i) = ind;
+end
+clases = clases';

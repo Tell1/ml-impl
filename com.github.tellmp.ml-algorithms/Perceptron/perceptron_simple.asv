@@ -1,0 +1,64 @@
+function clases = perceptron_simple(entradas, objetivos, parametros)
+
+%Función que entrena un perceptrón simple y lo usa para clasificar unos
+%ejemplos.
+%Los datos del struct de parámetros son los siguientes:
+% - maxIter: número de iteraciones.
+% - trainRatio: porcentaje del conjunto de datos de entrada que se va a
+%               usar para entrenar. El resto (1-trainRatio) se usa como
+%               test.
+% - fAprendizaje: factor de aprendizaje. En teoría, debería ser un valor
+%                 entre 0 y 1.
+% Adrián González Duarte - CNE 2012-2013
+
+disp('Iniciando perceptrón simple...')
+
+%división de los datos
+[trainInputs, trainTargets, testInputs, testTargets] = dividir_datos(entradas, objetivos, parametros);
+
+disp('Datos divididos correctamente')
+
+%configuración
+red = configuracion(trainInputs, trainTargets, parametros);
+
+disp('Red configurada correctamente')
+
+%entrenamiento
+red = entrenamiento(red, trainInputs, trainTargets, parametros);
+
+disp('Red entrenada correctamente')
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%clasificación de los datos de test
+for i=1:size(testTargets, 2)
+    testSal(i, :) = clasificacion (red.W(:, i), red.b(i), testInputs);
+    testClases = testSal';
+    
+    %matriz de confusión test
+    fprintf(1,'Matriz de confusión de los datos de TEST, salida %d', i)
+    [matriz_confusion_test,order_test] = confusionmat(testTargets(:, i), testClases(:, i))
+
+end
+
+disp('Porcentaje bien calculadas, datos de TEST')
+for z=1:size(test
+por = 100 - (sum(testTargets~=testClases)/size(testTargets,1))*100;
+porcentajetest = sum(por)/size(por, 2)
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%clasificación
+for i=1:size(objetivos, 2)
+    sal(i, :) = clasificacion (red.W(:, i), red.b(i), entradas);
+    clases = sal';
+    
+    %matriz de confusión
+    fprintf(1,'Matriz de confusión, salida %d', i)
+    [matriz_confusion,order] = confusionmat(objetivos(:, i), clases(:, i))
+    
+end
+
+disp('Porcentaje bien calculadas')
+por = 100 - (sum(objetivos~=clases)/size(objetivos,1))*100;
+porcentajetotal = sum(por)/size(por, 2)

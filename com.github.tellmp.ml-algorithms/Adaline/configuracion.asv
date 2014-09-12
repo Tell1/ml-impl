@@ -1,0 +1,10 @@
+function [red] = configuracion(entradas, objetivos, parametros)
+
+% Función que inicializa la estructura de la red
+
+numEntradas = size(entradas,1);
+
+
+
+end
+

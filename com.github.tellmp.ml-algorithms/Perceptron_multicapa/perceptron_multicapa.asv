@@ -1,0 +1,33 @@
+function clases = perceptron_multicapa(entradas, objetivos, parametros)
+
+%Función que entrena un perceptrón multicapa y lo usa para clasificar unos
+%ejemplos.
+%Los datos del struct de parámetros son los siguientes:
+% - maxIter: número de iteraciones.
+% - trainRatio: porcentaje del conjunto de datos de entrada que se va a
+%               usar para entrenar.
+% - valRatio: porcentaje del conjunto de datos de entrada que se van a usar
+%             como validación. El resto (1 - trainRatio - valRatio) será
+%             usado como test.
+% - fAprendizaje: factor de aprendizaje. En teoría, debería ser un valor
+%                 entre 0 y 1.
+% - m: número de neuronas en la capa oculta.
+
+%división de los datos
+[trainInputs, trainTargets, valInputs, valTargets, testInputs, testTargets] = dividir_datos(entradas, objetivos, parametros);
+
+%configuración
+red = configuracion(trainInputs, trainTargets, parametros);
+
+%entrenamiento
+red = entrenamiento(red, trainInputs, trainTargets, parametros);
+
+red
+
+%clasificación
+% clases = clasificacion (red, entradas, parametros);
+% clases
+%for i=1:size(objetivos, 2)
+    %sal(i, :) = clasificacion (red.W(:, i), red.b(i), entradas);
+    %clases = sal';
+%end

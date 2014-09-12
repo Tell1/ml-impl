@@ -1,0 +1,35 @@
+function [W, b] = entrenamiento(trainInputs, trainTargets, parametros)
+
+%Entrenamiento de la red.
+%Devuelve la matriz de pesos y el array de bias ya entrenados.
+
+%Construcción de la matriz W
+%W = zeros(size(trainInputs, 2),size(trainTargets, 2));
+%W = W + 1;    %inicializamos
+
+%Construcción del array de bias
+b = zeros(1, size(trainTargets, 2));
+%b = b - 0.5;    %inicializamos
+
+for i=1:parametros.maxIter,
+    
+    %selección de una fila aleatoria
+    randomIndex = randi([1, size(trainInputs, 1)]);
+    randomRowInput = trainInputs(randomIndex, :);
+    randomRowTarget = trainTargets(randomIndex, :);
+    
+    %Entrenamos un perceptrón por cada una de las columnas de la salida, ya
+    %que un perceptrón sólo puede dar una única salida.
+    for j=1:size(trainTargets, 2),
+        %función de activación
+        y = funcionActivacion(randomRowInput, W(:, j), b(j));
+                
+        %cálculo del error cometido
+        e = (randomRowTarget(j) - y);
+        
+        %adaptación de los pesos
+        [W(:, j), b(j)] = reglaAprendizaje (W(:, j), b(j), randomRowInput, e, parametros.fAprendizaje);
+        
+    end
+    
+end

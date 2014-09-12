@@ -1,0 +1,33 @@
+function clases = som(entradas, objetivos, parametros)
+
+%Función que entrena un k-medias y lo usa para clasificar unos
+%ejemplos.
+%Los datos del struct de parámetros son los siguientes:
+% - maxIter: número de iteraciones.
+% - trainRatio: porcentaje del conjunto de datos de entrada que se va a
+%               usar para entrenar.
+% - valRatio: porcentaje del conjunto de datos de entrada que se van a usar
+%             como validación. El resto (1 - trainRatio - valRatio) será
+%             usado como test.
+% - fAprendizaje: factor de aprendizaje inicial.
+% - m: número de neuronas del som.
+% Adrián Gonza
+
+
+%división de los datos
+[trainInputs, trainTargets, testInputs, testTargets] = dividir_datos(entradas, objetivos, parametros);
+
+%configuración
+red = configuracion(trainInputs, trainTargets, parametros);
+
+%entrenamiento
+red = entrenamiento(red, trainInputs, trainTargets, parametros);
+
+precTrain = calc_precision( trainInputs, red )
+errClas = med_preservacion( trainInputs, red )
+
+%clasificación
+clases = clasificacion (red, entradas, parametros);
+
+precClas = calc_precision( entradas, red )
+errClas = med_preservacion( entradas, red )

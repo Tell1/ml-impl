@@ -1,0 +1,16 @@
+function [D, threshold] = reglaAprendizaje (W, b, x, e, fAprendizaje)
+
+n = (fAprendizaje*x*e)';
+
+%D = bsxfun(@plus, W, n);
+
+
+D
+W
+%adaptación del umbral: si los pesos cambian, hay que cambiarlo
+if D ~= W
+    threshold = b-1;
+else
+    threshold = b;
+end
+

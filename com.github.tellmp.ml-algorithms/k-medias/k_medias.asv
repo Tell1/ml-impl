@@ -1,0 +1,46 @@
+function clases = k_medias(entradas, objetivos, parametros)
+
+%Función que entrena un k-medias y lo usa para clasificar unos
+%ejemplos.
+%Los datos del struct de parámetros son los siguientes:
+% - maxIter: número de iteraciones.
+% - trainRatio: porcentaje del conjunto de datos de entrada que se va a
+%               usar para entrenar.
+% - valRatio: porcentaje del conjunto de datos de entrada que se van a usar
+%             como validación. El resto (1 - trainRatio - valRatio) será
+%             usado como test.
+% - numCentros: número de centros que va a buscar el algoritmo
+% - kMeansPP: un valor de 0 indica que se va a usar el k-medias normal.
+%             Cualquier otro valor indica que se va a usar la variante 
+%             k-medias++.
+
+%división de los datos
+[trainInputs, trainTargets, testInputs, testTargets] = dividir_datos(entradas, objetivos, parametros);
+
+%configuración
+red = configuracion(trainInputs, trainTargets, parametros);
+
+%entrenamiento
+red = entrenamiento(red, trainInputs, trainTargets, parametros);
+
+disp('Los centros encontrados son: ')
+red.centros
+
+%clasificación y error de los datos de test
+clasesTest = clasificacion (red, testInputs, parametros);
+%medida de error
+disp('Medida del error, datos de TEST:')
+errorTest = medida_error(clasesTest, testInputs, red.centros);
+errorTest
+
+%clasificación
+clases = clasificacion (red, entradas, parametros);
+
+%medida de error
+disp('Medida del error:')
+error = medida_error(clases, entradas, red.centros);
+error
+
+%tamaño de las regiones de voronoi
+
+
