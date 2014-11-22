@@ -1,0 +1,9 @@
+language: scala
+jdk:
+  - oraclejdk7
+#  - openjdk7
+notifications:
+  email:
+    on_success: never
+    on_failure: always
+  irc: "irc.freenode.org#cilib"
