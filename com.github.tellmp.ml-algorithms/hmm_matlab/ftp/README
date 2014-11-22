@@ -1,0 +1,46 @@
+Contents of this directory
+
+PROGRAMS
+
+ * Simple HMMs * 
+
+simpledemo.m	- Simple demo of HMM code
+hmm.m		- hmm code
+hmm_cl.m	- code for calculating likelihood for an hmm
+
+ * Factorial HMMs *
+
+fhmm.m		- factorial HMM code (exact algorithm -- very slow)
+pmhmm.m		- factorial HMM code (approximate algorithm using a
+				structured variational approximation)
+calclike.m	- calculate exact likelihood for factorial HMM
+calcmflike.m	- calculate approximate likelihood for factorial HMM
+
+ * Decision Tree HMMs *
+
+treehmm.m	- Decision Tree Hidden Markov Model 
+toy.m		- script for generating toy dataset
+chor.m		- script for reading in data, processing, running hmms, etc
+
+UTILITIES
+
+chorparse.m	- parse Bach chorales (one of the data sets I've used
+			for factorial HMMs)
+dsample.m	- sample from a probability vector 
+cdiv.m		- column division
+rdiv.m		- row division
+rprod.m		- row product
+rsum.m		- row sum
+csum.m		- column sum
+rnorm.m		- row normalization
+uniqmean.m	- find unique means
+base.m		- return a number in a different base
+
+DATA
+
+Cptest		- test set of 18 chorales of length 40
+Cptrain		- training set of 30 chorales of length 40
+Cpval		- validation set of 18 chorales of length 40
+chorales.num	- raw chorales dataset
+X.mat		- toy data from depth-3 binary tree
+

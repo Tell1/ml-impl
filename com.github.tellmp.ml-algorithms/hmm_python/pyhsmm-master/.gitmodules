@@ -1,0 +1,3 @@
+[submodule "basic/pybasicbayes"]
+	path = basic/pybasicbayes
+	url = git://github.com/mattjj/pybasicbayes.git
